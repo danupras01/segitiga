@@ -37,54 +37,51 @@
 				<span class="login100-form-title p-b-41">
 					PERHITUNGAN LUAS SEGITIGA
 				</span>
-				<form class="login100-form validate-form p-b-33 p-t-5"
-					action="index.php" method="post">
-					<div class="wrap-input100 validate-input" data-validate = "Anda tidak memasukkan Tinggi">
-						<input class="input100" type="text" name="tinggi" placeholder="Tinggi">
-						<span class="focus-input100" data-placeholder="&#xe82a;"></span>
-					</div>
-
-					<div class="wrap-input100 validate-input" data-validate="Anda tidak memasukkan Alas">
-						<input class="input100" type="text" name="alas" placeholder="Alas">
-						<span class="focus-input100" data-placeholder="&#xe80f;"></span>
-					</div>
-
-					<div class="container-login100-form-btn m-t-32">
-						<button class="login100-form-btn" type="submit" name="submit" value="Hitung">
-								Hitung				
-						</button>
-					</div>
-
-				</form>
 				<br>
 
 				<form class="login100-form validate-form p-b-33 p-t-5">
-					<span class="login100-form-hasil p-b-41.">
-					<?php
-				if (isset($_POST ['submit'])){
-					$alas = $_POST['alas'];
-					$tinggi = $_POST['tinggi'];
-					$Luas_segitiga = 1/2 * $alas * $tinggi; //Menghitung luas segitiga
-					// echo "   Luas segitiga dengan alas : $alas, dan $tinggi <br>";
-					// echo "   yaitu $Luas_segitiga";
-					
-					$tanggal_hari_ini = date('Y-m-d',time());
+					<table class="blueTable" id="tab">
+					<thead>
+					<tr>
+					<th>NRP</th>
+					<th>Alas</th>
+					<th>Tinggi</th>
+					<th>Luas</th>
+					<th>Tanggal</th>
+					</tr>
+					</thead>
+					<tbody>
+					<?php 
 
-					$sql = "INSERT INTO segitiga (id,alas, tinggi, luas,created_date)
-					VALUES (null,'$alas', '$tinggi', '$Luas_segitiga','$tanggal_hari_ini')";
+					$sql = "SELECT * FROM segitiga";
+					$result = $conn->query($sql);
 
-					if ($conn->query($sql) === TRUE) {
-					echo "New record created successfully";
-					} else {
-					echo "Error: " . $sql . "<br>" . $conn->error;
-					}					
-				}
-				?>
-					</span>
-							
+					if (!empty($result)) {
+					// output data of each row
+					foreach ($result as $key => $value) {
+					?>
+					<tr>
+					<td><?php echo $value['nrp']?></td>
+					<td><?php echo $value['alas']?></td>
+					<td><?php echo $value['tinggi']?></td>
+					<td><?php echo $value['luas']?></td>
+					<td><?php echo $value['tanggal']?></td>
+					</tr>
+
+					<?php	
+					}
+					} 
+
+					?>
+
+					</tbody>
+					</table>
+			
 				
 					
 				</form>
+
+				
 			</div>
 		</div>
 	</div>
@@ -108,6 +105,17 @@
 	<script src="vendor/countdowntime/countdowntime.js"></script>
 <!--===============================================================================================-->
 	<script src="js/main.js"></script>
+
+
+	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+
+	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+
+	<script>
+	$(document).ready( function () {
+	$('#tab').DataTable();
+	} );
+	</script>
 
 </body>
 </html>
